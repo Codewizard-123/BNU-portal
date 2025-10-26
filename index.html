@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Odoo CMS - Student Portal</title>
+    <style>
+      /* Dropdown Menu Styling */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 180px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border-radius: 4px;
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        color: #333;
+        padding: 10px 15px;
+        display: block;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .dropdown-content a:hover {
+        background-color: #f1f1f1;
+      }
+
+      /* Show dropdown on hover */
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+
+      /* Optional: Make main menu link look like others */
+      .menu a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 14px;
+      }
+      .dropdown a {
+        color: white;
+      }
+
+      .personal-info {
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        font-family: Arial, sans-serif;
+        font-size: 15px;
+      }
+
+      .personal-info h2,
+      .personal-info h3 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .info-grid {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+
+      .info-column {
+        width: 48%;
+      }
+
+      .info-column p {
+        margin: 6px 0;
+      }
+
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      hr {
+        margin: 20px 0;
+        border: none;
+        border-top: 1px solid #ddd;
+      }
+      /* General styling */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f6f6f6;
+        color: #333;
+      }
+
+      /* Top Bar */
+      .topbar {
+        background-color: #6e2c91;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 20px;
+      }
+      .logo {
+        font-weight: bold;
+        font-size: 18px;
+      }
+      .menu a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 14px;
+      }
+
+      /* Sub Header */
+      .sub-header {
+        background-color: #f1f1f1;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .sub-header h2 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+      }
+      .actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn {
+        border: none;
+        padding: 6px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .edit {
+        background-color: #00a1ff;
+        color: white;
+      }
+      .create {
+        background-color: #6e2c91;
+        color: white;
+      }
+
+      /* Container */
+      .container {
+        margin: 20px;
+        background: white;
+        border-radius: 6px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+
+      /* Tabs */
+      .tabs {
+        border-bottom: 2px solid #ccc;
+        margin-bottom: 10px;
+      }
+      .tabs button {
+        background: none;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .tabs button.active {
+        background-color: #6e2c91;
+        color: white;
+        border-radius: 4px 4px 0 0;
+      }
+
+      /* Content sections */
+      .tab-content {
+        display: none;
+        padding: 20px;
+        border-radius: 0 0 6px 6px;
+        background: #fff;
+      }
+      .tab-content.active {
+        display: block;
+      }
+
+      /* Table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        font-size: 13px;
+        text-align: left;
+      }
+      th {
+        background-color: #f1f1f1;
+      }
+
+      /* Lists and paragraphs */
+      ul {
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="topbar">
+      <div class="logo">BNU Dashboard Proposal by Hassan Farooq</div>
+      <div class="menu">
+        <a href="#">Students</a>
+        <a href="#">Organization</a>
+        <a href="#">Academic Setup</a>
+      </div>
+    </div>
+
+    <div class="sub-header">
+      <h2>Students / SU92-PHBAW-F22-014 - Hassan</h2>
+      <div class="actions">
+        <button class="btn edit">EDIT</button>
+        <button class="btn create">CREATE</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="active" onclick="showTab('personal-info')">
+          Personal Information
+        </button>
+        <button onclick="showTab('academic')">Current Academic</button>
+        <button onclick="showTab('FeeReceipt')">Fee Receipts</button>
+        <button onclick="showTab('RefundRequest')">Refund requests</button>
+        <button onclick="showTab('attendance')">Attendance</button>
+        <button onclick="showTab('results')">Results</button>
+        <button onclick="showTab('registered')">Registered Courses</button>
+        <button onclick="showTab('contact')">Contact Details</button>
+        <button onclick="showTab('admission')">Admission Details</button>
+        <button onclick="showTab('achistory')">Academic History</button>
+        <button onclick="showTab('card')">Card Settings</button>
+        <button onclick="showTab('program')">Program transfers</button>
+        <button onclick="showTab('extra')">Extra Activities</button>
+        <button onclick="showTab('research')">Research Accounts</button>
+        <button onclick="showTab('researchDetails')">Research Details</button>
+        <button onclick="showTab('publications')">Publications</button>
+        <button onclick="showTab('package')">Package Details</button>
+        <button onclick="showTab('moodle')">Moodle</button>
+        <button onclick="showTab('OBE')">OBE</button>
+      </div>
+
+      <!-- Tab Contents -->
+      <div id="personal-info" class="tab-content active">
+        <h2>Personal Information</h2>
+        <div class="info-grid">
+          <div class="info-column">
+            <p><strong>Attachment Count:</strong> 5</p>
+            <p>
+              <strong>Main Attachment:</strong>
+              <a href="#">Hassan due date extension allowed_0001.pdf</a>
+            </p>
+            <p><strong>Gender:</strong> Male</p>
+            <p>
+              <strong>Show Offer Letter Button:</strong>
+              <input type="checkbox" checked />
+            </p>
+            <p><strong>Status - Temp:</strong> Draft</p>
+            <p><strong>Religion:</strong> Islam</p>
+            <p><strong>Nationality:</strong> Pakistan</p>
+            <p><strong>Domicile:</strong> Punjab</p>
+          </div>
+
+          <div class="info-column">
+            <p><strong>CNIC:</strong> 35202-1198929-9</p>
+            <p><strong>CNIC Expiry Date:</strong> -</p>
+            <p><strong>Birth Date:</strong> 01/10/1990</p>
+            <p><strong>Languages:</strong> English, Urdu</p>
+            <p><strong>Blood Group:</strong> Not Known</p>
+            <p><strong>User:</strong> <a href="#">Hassan Farooq</a></p>
+            <p>
+              <strong>Linked Partner:</strong> <a href="#">Hassan Farooq</a>
+            </p>
+          </div>
+        </div>
+
+        <hr />
+
+        <h3>Family Details</h3>
+        <div class="info-grid">
+          <div class="info-column">
+            <p><strong>Father Name:</strong> MUHAMMAD FAROOQ AZAM</p>
+            <p><strong>Father Status:</strong> Alive</p>
+            <p><strong>Father Profession:</strong> -</p>
+            <p><strong>Father Income:</strong> 0</p>
+            <p><strong>Father/Guardian CNIC:</strong> -</p>
+          </div>
+
+          <div class="info-column">
+            <p><strong>Mother Name:</strong> -</p>
+            <p><strong>Mother Status:</strong> Alive</p>
+            <p><strong>Mother Profession:</strong> -</p>
+            <p><strong>Mother Income:</strong> 0</p>
+            <p><strong>Email For Notification:</strong> -</p>
+            <p><strong>Mobile For SMS:</strong> -</p>
+            <p>
+              <strong>Survey Supervision:</strong> <input type="checkbox" />
+              <strong>Attendance Supervision:</strong>
+              <input type="checkbox" /> <strong>Fee Supervision:</strong>
+              <input type="checkbox" />
+            </p>
+          </div>
+        </div>
+
+        <hr />
+
+        <h3>Emergency Contact</h3>
+        <p>-</p>
+      </div>
+
+      <div id="academic" class="tab-content">
+        <h3>Current Academic</h3>
+        <ul>
+          <li>Enrolled Semester: Fall 2022 - 2025</li>
+          <li>Department: Business Administration</li>
+          <li>Supervisor: Dr. Ahmed Khan</li>
+          <li>Courses:</li>
+        </ul>
+        <ol>
+          <li>Advanced Research Methodologies</li>
+          <li>Strategic Management</li>
+          <li>Organizational Behavior</li>
+        </ol>
+      </div>
+
+      <div id="FeeReceipt" class="tab-content">
+        <h3>Fee Receipt</h3>
+        <table>
+          <tr>
+            <th>Student</th>
+            <th>Invoice Date</th>
+            <th>Number</th>
+            <th>Current Term</th>
+            <th>Journal</th>
+            <th>Due Date</th>
+            <th>Payment Date</th>
+            <th>Amount</th>
+            <th>Recepit Form</th>
+          </tr>
+          <tr>
+            <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+            <td>21/05/2024</td>
+            <td>INV/2024/05/36609</td>
+            <td>SPRING 2024</td>
+            <td>Customer Invoices (SP) (PK)</td>
+            <td>02/08/2024</td>
+            <td>02/08/2024</td>
+            <td>57,250.00</td>
+            <td>THESIS FEE</td>
+          </tr>
+
+          <tr>
+            <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+            <td>21/05/2024</td>
+            <td>INV/2024/05/36581</td>
+            <td>FALL 2024</td>
+            <td>Customer Invoices (SP) (PK)</td>
+            <td>22/10/2024</td>
+            <td>22/10/2024</td>
+            <td>57,250.00</td>
+            <td>THESIS FEE</td>
+          </tr>
+
+          <tr>
+            <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+            <td>21/05/2024</td>
+            <td>INV/2024/05/36517</td>
+            <td>SPRING 2025</td>
+            <td>Customer Invoices (SP) (PK)</td>
+            <td>18/02/2025</td>
+            <td>18/02/2025</td>
+            <td>57,250.00</td>
+            <td>THESIS FEE</td>
+          </tr>
+
+          <tr>
+            <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+            <td>16/04/2023</td>
+            <td>INV/2023/04/10209</td>
+            <td>SPRING 2023</td>
+            <td>Customer Invoices (SP) (PK)</td>
+            <td>05/05/2023</td>
+            <td>04/05/2023</td>
+            <td>32,500.00</td>
+            <td>Misc. Fee</td>
+          </tr>
+
+          <tr>
+            <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+            <td>14/10/2022</td>
+            <td>INV/2022/10/09783</td>
+            <td>FALL 2022</td>
+            <td>Customer Invoices (SP) (PK)</td>
+            <td>15/12/2022</td>
+            <td>15/12/2022</td>
+            <td>62,500.00</td>
+            <td>Admission Fee</td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="RefundRequest" class="tab-content">
+        <table>
+          <th>Student</th>
+          <th>Detailed Description</th>
+          <th>Detailed Description</th>
+          <th>Refund Type</th>
+          <th>Status</th>
+        </table>
+      </div>
+      <div id="attendance" class="tab-content">
+        <h3>Attendance Record</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Class</th>
+              <th>Attendance (%)</th>
+              <th>Program</th>
+              <th>Academic Session</th>
+              <th>Term</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+              <td>Strategic Management</td>
+              <td>84.21</td>
+              <td>ph.D in Business Administration</td>
+              <td>FALL 2022-2025</td>
+              <td>FALL 2022</td>
+            </tr>
+            <tr>
+              <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+              <td>Organizational Behavior</td>
+              <td>93.75</td>
+              <td>ph.D in Business Administration</td>
+              <td>FALL 2022-2025</td>
+              <td>FALL 2022</td>
+            </tr>
+            <tr>
+              <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+              <td>Advanced Research</td>
+              <td>100.00</td>
+              <td>ph.D in Business Administration</td>
+              <td>FALL 2022-2025</td>
+              <td>FALL 2022</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="results" class="tab-content">
+        <h3>Results</h3>
+        <table>
+          <tr>
+            <th>Sudent</th>
+            <th>Term</th>
+            <th>Batch</th>
+            <th>Attempted Credits</th>
+            <th>Earned Credits</th>
+            <th>Grade Points</th>
+            <th>SGPA</th>
+            <th>Status</th>
+          </tr>
+          <tr>
+            <td>SU92-PHBAW-F22-014 - Hassan Farooq</td>
+            <td>FALL 2022</td>
+            <td>ph.D in Business Administration</td>
+            <td>9.00</td>
+            <td>9.00</td>
+            <td>32.01</td>
+            <td>3.56</td>
+            <td>Done</td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="registered" class="tab-content">
+        <h3>Current</h3>
+        <table>
+          <th>Term</th>
+          <th>Primary class</th>
+          <th>credits</th>
+          <th>Course type</th>
+          <th>Status</th>
+        </table>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <h3>Dropped</h3>
+        <table>
+          <th>Term</th>
+          <th>Primary class</th>
+          <th>credits</th>
+          <th>Course type</th>
+          <th>Status</th>
+        </table>
+      </div>
+
+      <div id="contact" class="tab-content">
+        <th>Email:</th>
+        <th>xyz@bnu.edu.pk</th>
+        <br />
+        <br />
+        <br />
+        <th>Official Email:</th>
+        <th>xyz@bnu.edu.pk</th>
+        <br />
+        <br />
+        <br />
+        <th>Present Address:</th>
+        <th>John Doe, 123 Maple Street, Anytown, PA 17101</th>
+        <br />
+        <br />
+        <br />
+        <th>Mobile:</th>
+        <th>03122312123</th>
+      </div>
+
+      <div id="admission" class="tab-content">
+        <p>Application ref: Hassan Farooq</p>
+        <p>Application Date: 12/10/2022 15:10</p>
+      </div>
+
+      <div id="achistory" class="tab-content">
+        <p>Admission Number: SU19947</p>
+        <p>Merit</p>
+        <p>Urban/Rural</p>
+        <p>PC cadet</p>
+        <p>First Generation Studying</p>
+        <br /><br /><br /><br />
+        <table>
+          <tr>
+            <th>Degree level</th>
+            <th>Degree</th>
+            <th>Passing year</th>
+            <th>Board name</th>
+            <th>Subjects</th>
+            <th>Total Marks</th>
+            <th>CGPA</th>
+            <th>Obt Marks</th>
+          </tr>
+        </table>
+      </div>
+
+      <div id="card" class="tab-content">
+        <p>Valid upto: 31/12/27</p>
+      </div>
+
+      <div id="program" class="tab-content">
+        <table>
+          <tr>
+            <th>Transfer Type</th>
+            <th>University</th>
+            <th>Term Line</th>
+            <th>Term Line</th>
+            <th>Institute</th>
+            <th>Campus</th>
+            <th>Campus</th>
+            <th>Registration No</th>
+            <th>Mode of Student</th>
+          </tr>
+        </table>
+      </div>
+      <div id="extra" class="tab-content">
+        <table>
+          <tr>
+            <th>Name</th>
+            <th>Remarks</th>
+            <th>Date</th>
+          </tr>
+        </table>
+      </div>
+
+      <div id="research" class="tab-content">
+        <h3>Student Particulars</h3>
+        <table>
+          <tr>
+            <th>Google Scholar</th>
+            <th>ORCID Account</th>
+            <th>RG Account</th>
+            <th>PUBLON</th>
+            <th>SCOPUS</th>
+            <th>LinkedIn</th>
+          </tr>
+        </table>
+      </div>
+
+      <div id="researchDetails" class="tab-content">
+        <p>
+          Thesis Topic: Unleashing AI's potential for Sustainability: The role
+          of green Absorptive capacity, Strategic Green orientation and Green
+          Innovation
+        </p>
+      </div>
+
+      <div id="publications" class="tab-content">
+        <table>
+          <tr>
+            <th>Google Scholar</th>
+            <th>ORCID Account</th>
+            <th>RG Account</th>
+            <th>PUBLON</th>
+            <th>SCOPUS</th>
+            <th>LinkedIn</th>
+          </tr>
+        </table>
+      </div>
+      <div id="package" class="tab-content">
+        <h3>Package Detail</h3>
+        <table class="package-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                Admission &amp; Registration Fee-Ph.D. in Business
+                Administration-(GCL-PHBAW)
+              </td>
+              <td style="text-align: right">30,000.00</td>
+            </tr>
+            <tr>
+              <td>Tuition Fee-Ph.D. in Business Administration-(GCL-PHBAW)</td>
+              <td style="text-align: right">111,280.00</td>
+            </tr>
+            <tr>
+              <td>Misc Fee-Ph.D. in Business Administration-(GCL-PHBAW)</td>
+              <td style="text-align: right">7,500.00</td>
+            </tr>
+            <tr>
+              <td>ENTREPRENEURSHIP FEE - CMACED</td>
+              <td style="text-align: right">7,500.00</td>
+            </tr>
+            <tr>
+              <td>ACP Fee - CMACED</td>
+              <td style="text-align: right">2,500.00</td>
+            </tr>
+            <tr>
+              <td>Repeat</td>
+              <td style="text-align: right">104,000.00</td>
+            </tr>
+            <tr>
+              <td>Chairmain's Special Case 50% - PG</td>
+              <td style="text-align: right">55,640.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="moodle" class="tab-content">
+        <p>
+          NOTE Username should be in small letters and Passwords must be at
+          least 8 characters long, must have at least 1 lower case letter(s),
+          must have at least 1 upper case letter(s), must have at least 1
+          non-alphanumeric character(s) such as *, - ; or # and must have at
+          least 1 digit.
+        </p>
+      </div>
+      <div id="OBE" class="tab-content">
+        <h2>Outcome Based Education (OBE)</h2>
+        <p>
+          Outcome-Based Education (OBE) is an approach that focuses on the
+          outcomes or skills students should acquire by the end of a course or
+          program. It emphasizes measurable results, ensuring that teaching and
+          assessment are aligned with predefined learning outcomes.
+        </p>
+
+        <h3>Program Learning Outcomes (PLOs)</h3>
+        <ul>
+          <li>
+            PLO1: Apply knowledge of computing and mathematics to solve complex
+            problems.
+          </li>
+          <li>
+            PLO2: Design, implement, and evaluate computer-based systems to meet
+            desired needs.
+          </li>
+          <li>PLO3: Work effectively in teams to achieve common goals.</li>
+          <li>PLO4: Communicate effectively with a range of audiences.</li>
+        </ul>
+
+        <h3>Course Learning Outcomes (CLOs)</h3>
+        <ul>
+          <li>CLO1: Understand the fundamental concepts of data structures.</li>
+          <li>CLO2: Implement algorithms using arrays, stacks, and queues.</li>
+          <li>CLO3: Analyze time and space complexity of algorithms.</li>
+        </ul>
+
+        <h3>Mapping of CLOs to PLOs</h3>
+        <table border="1" cellspacing="0" cellpadding="8">
+          <tr>
+            <th>CLO</th>
+            <th>PLO1</th>
+            <th>PLO2</th>
+            <th>PLO3</th>
+            <th>PLO4</th>
+          </tr>
+          <tr>
+            <td>CLO1</td>
+            <td>✔️</td>
+            <td>✔️</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>CLO2</td>
+            <td></td>
+            <td>✔️</td>
+            <td>✔️</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>CLO3</td>
+            <td>✔️</td>
+            <td>✔️</td>
+            <td></td>
+            <td>✔️</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <!-- closes .container -->
+
+    <script>
+      function showTab(tabId) {
+        // Hide all tab contents
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((tab) => tab.classList.remove("active"));
+
+        // Remove active class from all buttons
+        document
+          .querySelectorAll(".tabs button")
+          .forEach((btn) => btn.classList.remove("active"));
+
+        // Show clicked tab content
+        document.getElementById(tabId).classList.add("active");
+
+        // Highlight active button
+        event.target.classList.add("active");
+      }
+    </script>
+  </body>
+</html>
